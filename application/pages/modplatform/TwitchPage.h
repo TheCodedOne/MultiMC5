@@ -17,58 +17,40 @@
 
 #include <QWidget>
 
-#include "java/JavaChecker.h"
-#include "BaseInstance.h"
-#include <QObjectPtr.h>
-#include "BasePage.h"
-#include "JavaCommon.h"
-#include "MultiMC.h"
+#include "pages/BasePage.h"
+#include <MultiMC.h>
+#include "tasks/Task.h"
 
-class JavaChecker;
 namespace Ui
 {
-class InstanceSettingsPage;
+class TwitchPage;
 }
 
-class InstanceSettingsPage : public QWidget, public BasePage
+class TwitchPage : public QWidget, public BasePage
 {
 	Q_OBJECT
 
 public:
-	explicit InstanceSettingsPage(BaseInstance *inst, QWidget *parent = 0);
-	virtual ~InstanceSettingsPage();
+	explicit TwitchPage(QWidget *parent = 0);
+	virtual ~TwitchPage();
 	virtual QString displayName() const override
 	{
-		return tr("Settings");
+		return tr("Twitch");
 	}
 	virtual QIcon icon() const override
 	{
-		return MMC->getThemedIcon("instance-settings");
+		return MMC->getThemedIcon("twitch");
 	}
 	virtual QString id() const override
 	{
-		return "settings";
+		return "twitch";
 	}
-	virtual bool apply() override;
 	virtual QString helpPage() const override
 	{
-		return "Instance-settings";
+		return "Twitch-platform";
 	}
 	virtual bool shouldDisplay() const override;
 
-private slots:
-	void on_javaDetectBtn_clicked();
-	void on_javaTestBtn_clicked();
-	void on_javaBrowseBtn_clicked();
-
-	void applySettings();
-	void loadSettings();
-
-	void checkerFinished();
-
 private:
-	Ui::InstanceSettingsPage *ui;
-	BaseInstance *m_instance;
-	SettingsObjectPtr m_settings;
-	unique_qobject_ptr<JavaCommon::TestCheck> checker;
+	Ui::TwitchPage *ui;
 };

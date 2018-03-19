@@ -17,7 +17,7 @@
 
 #include <QWidget>
 
-#include "BasePage.h"
+#include "pages/BasePage.h"
 #include <MultiMC.h>
 #include <pathmatcher/IPathMatcher.h>
 

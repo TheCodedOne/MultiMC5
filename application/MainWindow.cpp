@@ -1368,6 +1368,7 @@ void MainWindow::addInstance(QString url)
 
 	const QUrl modpackUrl = newInstDlg.modpackUrl();
 
+	/*
 	if(newInstDlg.isFtbModpackRequested())
 	{
 		instanceFromFtbPack(newInstDlg.getFtbPackDownloader(), newInstDlg.instName(), newInstDlg.instGroup(), newInstDlg.iconKey());
@@ -1380,6 +1381,7 @@ void MainWindow::addInstance(QString url)
 	{
 		instanceFromVersion(newInstDlg.instName(), newInstDlg.instGroup(), newInstDlg.iconKey(), newInstDlg.selectedVersion());
 	}
+	*/
 }
 
 void MainWindow::on_actionAddInstance_triggered()

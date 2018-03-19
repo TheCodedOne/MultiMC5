@@ -11,6 +11,9 @@
 		<!-- REDDIT logo icon, needs reddit license! -->
 		<file>scalable/reddit-alien.svg</file>
 
+		<!-- twitch logo icon -->
+		<file>scalable/twitch.svg</file>
+
 		<!-- A proxy icon. Our own. SSSsss -->
 		<file>scalable/proxy.svg</file>
 

@@ -17,44 +17,44 @@
 
 #include <QWidget>
 
-#include "BaseInstance.h"
-#include "BasePage.h"
+#include "pages/BasePage.h"
 #include <MultiMC.h>
+#include "tasks/Task.h"
 
 namespace Ui
 {
-class NotesPage;
+class ImportPage;
 }
 
-class NotesPage : public QWidget, public BasePage
+class ImportPage : public QWidget, public BasePage
 {
 	Q_OBJECT
 
 public:
-	explicit NotesPage(BaseInstance *inst, QWidget *parent = 0);
-	virtual ~NotesPage();
+	explicit ImportPage(QWidget *parent = 0);
+	virtual ~ImportPage();
 	virtual QString displayName() const override
 	{
-		return tr("Notes");
+		return tr("Import from zip");
 	}
 	virtual QIcon icon() const override
 	{
-		auto icon = MMC->getThemedIcon("notes");
-		if(icon.isNull())
-			icon = MMC->getThemedIcon("news");
-		return icon;
+		return MMC->getThemedIcon("viewfolder");
 	}
 	virtual QString id() const override
 	{
-		return "notes";
+		return "import";
 	}
-	virtual bool apply() override;
 	virtual QString helpPage() const override
 	{
-		return "Notes";
+		return "Zip-import";
 	}
+	virtual bool shouldDisplay() const override;
+
+private slots:
+	void on_modpackBtn_clicked();
 
 private:
-	Ui::NotesPage *ui;
-	BaseInstance *m_inst;
+	Ui::ImportPage *ui;
 };
+

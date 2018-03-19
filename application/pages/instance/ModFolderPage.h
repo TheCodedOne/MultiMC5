@@ -18,7 +18,7 @@
 #include <QWidget>
 
 #include "minecraft/MinecraftInstance.h"
-#include "BasePage.h"
+#include "pages/BasePage.h"
 #include <MultiMC.h>
 
 class ModList;
