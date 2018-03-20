@@ -20,13 +20,16 @@
 #include "pages/BasePage.h"
 #include <MultiMC.h>
 #include "tasks/Task.h"
-#include "modplatform/ftb/FtbPackDownloader.h"
 #include "modplatform/ftb/PackHelpers.h"
 
 namespace Ui
 {
 class FTBPage;
 }
+
+class FtbListModel;
+class FtbFilterModel;
+class FtbPackDownloader;
 
 class FTBPage : public QWidget, public BasePage
 {
@@ -55,15 +58,25 @@ public:
 
 	FtbPackDownloader* getFtbPackDownloader();
 	bool isFtbModpackRequested();
+	FtbModpack getSelectedModpack();
+	QString getSelectedVersion();
 
 private slots:
 	void on_btnChooseFtbPack_clicked();
 	void ftbPackDataDownloadSuccessfully();
 	void ftbPackDataDownloadFailed();
+	void onSortingSelectionChanged(QString data);
+	void onVersionSelectionItemChanged(QString data);
+	void onPackSelectionChanged(QModelIndex first, QModelIndex second);
 
 private:
 	bool ftbModpackRequested = false;
 	FtbPackDownloader* ftbPackDownloader = nullptr;
 	FtbModpack selectedPack;
+	FtbModpack selected;
+	QString selectedVersion;
+	FtbListModel* listModel;
+	FtbFilterModel* filterModel;
+
 	Ui::FTBPage *ui;
 };

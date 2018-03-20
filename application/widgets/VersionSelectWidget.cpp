@@ -6,8 +6,8 @@
 #include <VersionProxyModel.h>
 #include <dialogs/CustomMessageBox.h>
 
-VersionSelectWidget::VersionSelectWidget(BaseVersionList* vlist, QWidget* parent)
-	: QWidget(parent), m_vlist(vlist)
+VersionSelectWidget::VersionSelectWidget(QWidget* parent)
+	: QWidget(parent)
 {
 	setObjectName(QStringLiteral("VersionSelectWidget"));
 	verticalLayout = new QVBoxLayout(this);
@@ -15,7 +15,6 @@ VersionSelectWidget::VersionSelectWidget(BaseVersionList* vlist, QWidget* parent
 	verticalLayout->setContentsMargins(0, 0, 0, 0);
 
 	m_proxyModel = new VersionProxyModel(this);
-	m_proxyModel->setSourceModel(vlist);
 
 	listView = new VersionListView(this);
 	listView->setObjectName(QStringLiteral("listView"));
@@ -27,8 +26,6 @@ VersionSelectWidget::VersionSelectWidget(BaseVersionList* vlist, QWidget* parent
 	listView->header()->setCascadingSectionResizes(true);
 	listView->header()->setStretchLastSection(false);
 	listView->setModel(m_proxyModel);
-	listView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-	listView->header()->setSectionResizeMode(resizeOnColumn, QHeaderView::Stretch);
 	verticalLayout->addWidget(listView);
 
 	sneakyProgressBar = new QProgressBar(this);
@@ -67,8 +64,13 @@ void VersionSelectWidget::setResizeOn(int column)
 	listView->header()->setSectionResizeMode(resizeOnColumn, QHeaderView::Stretch);
 }
 
-void VersionSelectWidget::initialize()
+void VersionSelectWidget::initialize(BaseVersionList *vlist)
 {
+	m_vlist = vlist;
+	m_proxyModel->setSourceModel(vlist);
+	listView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	listView->header()->setSectionResizeMode(resizeOnColumn, QHeaderView::Stretch);
+
 	if (!m_vlist->isLoaded())
 	{
 		loadList();

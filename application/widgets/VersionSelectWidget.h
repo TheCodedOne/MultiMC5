@@ -28,11 +28,11 @@ class VersionSelectWidget: public QWidget
 {
 	Q_OBJECT
 public:
-	explicit VersionSelectWidget(BaseVersionList *vlist, QWidget *parent = 0);
+	explicit VersionSelectWidget(QWidget *parent = 0);
 	~VersionSelectWidget();
 
 	//! loads the list if needed.
-	void initialize();
+	void initialize(BaseVersionList *vlist);
 
 	//! Starts a task that loads the list.
 	void loadList();

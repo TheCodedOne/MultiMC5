@@ -14,7 +14,9 @@ VanillaPage::VanillaPage(QWidget *parent)
 	: QWidget(parent), ui(new Ui::VanillaPage)
 {
 	ui->setupUi(this);
+	ui->tabWidget->tabBar()->hide();
 	auto vlist = ENV.metadataIndex()->get("net.minecraft");
+	ui->versionList->initialize(vlist.get());
 	if(vlist->isLoaded())
 	{
 		setSelectedVersion(vlist->getRecommended());
@@ -32,6 +34,7 @@ VanillaPage::VanillaPage(QWidget *parent)
 			connect(task.get(), &Task::succeeded, this, &VanillaPage::versionListUpdated);
 		}
 	}
+	connect(ui->versionList, &VersionSelectWidget::selectedVersionChanged, this, &VanillaPage::setSelectedVersion);
 }
 
 VanillaPage::~VanillaPage()
@@ -76,13 +79,8 @@ void VanillaPage::versionListUpdated()
 void VanillaPage::setSelectedVersion(BaseVersionPtr version)
 {
 	m_selectedVersion = version;
-
-	if (m_selectedVersion)
+	if(m_selectedVersion)
 	{
-		// ui->versionTextBox->setText(version->descriptor());
-	}
-	else
-	{
-		// ui->versionTextBox->setText("");
+		qDebug() << "Version selected:" << version->descriptor();
 	}
 }

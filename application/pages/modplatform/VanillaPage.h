@@ -52,6 +52,8 @@ public:
 	virtual bool shouldDisplay() const override;
 
 	BaseVersionPtr selectedVersion() const;
+
+public slots:
 	void setSelectedVersion(BaseVersionPtr version);
 
 private slots:

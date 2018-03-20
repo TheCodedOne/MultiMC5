@@ -11,9 +11,8 @@
 
 #pragma once
 
-class FtbPackDownloader;
-class MULTIMC_LOGIC_EXPORT FtbPackDownloader : public QObject {
-
+class MULTIMC_LOGIC_EXPORT FtbPackDownloader : public QObject
+{
 	Q_OBJECT
 
 private:
