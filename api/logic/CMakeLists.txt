@@ -42,6 +42,10 @@ set(CORE_SOURCES
 	Env.h
 	Env.cpp
 
+	# String filters
+	Filter.h
+	Filter.cpp
+
 	# JSON parsing helpers
 	Json.h
 	Json.cpp

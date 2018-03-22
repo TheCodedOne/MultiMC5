@@ -15,26 +15,6 @@ class MULTIMC_LOGIC_EXPORT FtbPackDownloader : public QObject
 {
 	Q_OBJECT
 
-private:
-	QMap<QString, FtbModpack> fetchedPacks;
-	bool fetching = false;
-	bool done = false;
-
-	FtbModpack selected;
-	QString selectedVersion;
-	QString downloadPath;
-
-	FtbPackFetchTask *fetchTask = 0;
-	NetJobPtr netJobContainer;
-
-	void _downloadSucceeded();
-	void _downloadFailed(QString reason);
-	void _downloadProgress(qint64 current, qint64 total);
-
-private slots:
-	void fetchSuccess(FtbModpackList modlist);
-	void fetchFailed(QString reason);
-
 public:
 	FtbPackDownloader();
 	~FtbPackDownloader();
@@ -60,4 +40,24 @@ signals:
 	void downloadFailed(QString reason);
 	void downloadProgress(qint64 current, qint64 total);
 
+private slots:
+	void fetchSuccess(FtbModpackList modlist);
+	void fetchFailed(QString reason);
+
+private:
+	void _downloadSucceeded();
+	void _downloadFailed(QString reason);
+	void _downloadProgress(qint64 current, qint64 total);
+
+private:
+	QMap<QString, FtbModpack> fetchedPacks;
+	bool fetching = false;
+	bool done = false;
+
+	FtbModpack selected;
+	QString selectedVersion;
+	QString downloadPath;
+
+	FtbPackFetchTask *fetchTask = 0;
+	NetJobPtr netJobContainer;
 };

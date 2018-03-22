@@ -187,10 +187,15 @@ BaseVersionPtr VersionSelectWidget::selectedVersion() const
 
 void VersionSelectWidget::setExactFilter(BaseVersionList::ModelRoles role, QString filter)
 {
-	m_proxyModel->setFilter(role, filter, true);
+	m_proxyModel->setFilter(role, new ExactFilter(filter));
 }
 
 void VersionSelectWidget::setFuzzyFilter(BaseVersionList::ModelRoles role, QString filter)
 {
-	m_proxyModel->setFilter(role, filter, false);
+	m_proxyModel->setFilter(role, new ContainsFilter(filter));
+}
+
+void VersionSelectWidget::setFilter(BaseVersionList::ModelRoles role, Filter *filter)
+{
+	m_proxyModel->setFilter(role, filter);
 }

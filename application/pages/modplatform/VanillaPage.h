@@ -50,6 +50,7 @@ public:
 		return "Vanilla-platform";
 	}
 	virtual bool shouldDisplay() const override;
+	void opened() override;
 
 	BaseVersionPtr selectedVersion() const;
 
@@ -59,8 +60,10 @@ public slots:
 private slots:
 	void on_btnChangeVersion_clicked();
 	void versionListUpdated();
+	void filterChanged();
 
 private:
+	bool initialized = false;
 	Ui::VanillaPage *ui = nullptr;
 	bool m_versionSetByUser = false;
 	BaseVersionPtr m_selectedVersion;
