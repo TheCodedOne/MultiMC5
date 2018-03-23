@@ -73,3 +73,36 @@ void ImportPage::on_modpackBtn_clicked()
 	}
 	*/
 }
+
+/*
+QUrl NewInstanceDialog::modpackUrl() const
+{
+	if (ui->modpackBox->isChecked())
+	{
+		const QUrl url(ui->modpackEdit->text());
+		if (url.isValid() && !url.isRelative() && !url.host().isEmpty())
+		{
+			return url;
+		}
+		else
+		{
+			return QUrl::fromLocalFile(ui->modpackEdit->text());
+		}
+	}
+	else
+	{
+		return QUrl();
+	}
+	return QUrl();
+}
+*/
+
+/*
+	else if (ui->modpackBox->isChecked())
+	{
+		auto url = QUrl::fromUserInput(ui->modpackEdit->text());
+		QFileInfo fi(url.fileName());
+		suggestedName = fi.completeBaseName();
+	}
+	(ui->modpackBox->isChecked() && ui->modpackEdit->hasAcceptableInput()) ||
+*/

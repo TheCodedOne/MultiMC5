@@ -1366,9 +1366,8 @@ void MainWindow::addInstance(QString url)
 
 	MMC->settings()->set("LastUsedGroupForNewInstance", newInstDlg.instGroup());
 
-	const QUrl modpackUrl = newInstDlg.modpackUrl();
-
 	/*
+	const QUrl modpackUrl = newInstDlg.modpackUrl();
 	if(newInstDlg.isFtbModpackRequested())
 	{
 		instanceFromFtbPack(newInstDlg.getFtbPackDownloader(), newInstDlg.instName(), newInstDlg.instGroup(), newInstDlg.iconKey());

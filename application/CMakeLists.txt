@@ -172,8 +172,6 @@ SET(MULTIMC_SOURCES
 	dialogs/VersionSelectDialog.h
 	dialogs/SkinUploadDialog.cpp
 	dialogs/SkinUploadDialog.h
-	dialogs/ChooseFtbPackDialog.cpp
-	dialogs/ChooseFtbPackDialog.h
 
 
 	# GUI - widgets
@@ -263,7 +261,6 @@ SET(MULTIMC_UIS
 	dialogs/UpdateDialog.ui
 	dialogs/NotificationDialog.ui
 	dialogs/SkinUploadDialog.ui
-	dialogs/ChooseFtbPackDialog.ui
 
 	# Widgets/other
 	widgets/CustomCommands.ui

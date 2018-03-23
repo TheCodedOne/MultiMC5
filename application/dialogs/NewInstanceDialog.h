@@ -50,7 +50,6 @@ public:
 	QString instName() const;
 	QString instGroup() const;
 	QString iconKey() const;
-	QUrl modpackUrl() const;
 
 	QString dialogTitle() override;
 	QList<BasePage *> getPages() override;

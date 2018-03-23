@@ -25,12 +25,12 @@
 #include "VersionSelectDialog.h"
 #include "ProgressDialog.h"
 #include "IconPickerDialog.h"
-#include "ChooseFtbPackDialog.h"
 
 #include <QLayout>
 #include <QPushButton>
 #include <QFileDialog>
 #include <QValidator>
+#include <QDialogButtonBox>
 
 #include "widgets/PageContainer.h"
 #include <pages/modplatform/VanillaPage.h>
@@ -120,17 +120,13 @@ void NewInstanceDialog::setSuggestedPack(const PackSuggestion& pack)
 
 void NewInstanceDialog::updateDialogState()
 {
+	auto allowOK = suggestion.valid && !instName().isEmpty();
+	m_buttons->button(QDialogButtonBox::Ok)->setEnabled(allowOK);
 	/*
 	QString suggestedName;
 	if(ui->versionBox->isChecked())
 	{
 		suggestedName = ui->versionTextBox->text();
-	}
-	else if (ui->modpackBox->isChecked())
-	{
-		auto url = QUrl::fromUserInput(ui->modpackEdit->text());
-		QFileInfo fi(url.fileName());
-		suggestedName = fi.completeBaseName();
 	}
 	else if (ui->ftbBox->isChecked())
 	{
@@ -142,12 +138,9 @@ void NewInstanceDialog::updateDialogState()
 
 	bool allowOK = !instName().isEmpty() && (
 				(ui->versionBox->isChecked() && m_selectedVersion) ||
-				(ui->modpackBox->isChecked() && ui->modpackEdit->hasAcceptableInput()) ||
 				(ui->ftbBox->isChecked() && ftbPackDownloader && ftbPackDownloader->isValidPackSelected() )
 				);
 	*/
-
-
 }
 
 QString NewInstanceDialog::instName() const
@@ -173,29 +166,6 @@ QString NewInstanceDialog::iconKey() const
 {
 	return InstIconKey;
 }
-QUrl NewInstanceDialog::modpackUrl() const
-{
-	/*
-	if (ui->modpackBox->isChecked())
-	{
-		const QUrl url(ui->modpackEdit->text());
-		if (url.isValid() && !url.isRelative() && !url.host().isEmpty())
-		{
-			return url;
-		}
-		else
-		{
-			return QUrl::fromLocalFile(ui->modpackEdit->text());
-		}
-	}
-	else
-	{
-		return QUrl();
-	}
-	*/
-	return QUrl();
-}
-
 
 void NewInstanceDialog::on_iconButton_clicked()
 {
