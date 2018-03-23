@@ -8,11 +8,11 @@
 
 #include <meta/Index.h>
 #include <meta/VersionList.h>
-#include <dialogs/VersionSelectDialog.h>
+#include <dialogs/NewInstanceDialog.h>
 #include <Filter.h>
 
-VanillaPage::VanillaPage(QWidget *parent)
-	: QWidget(parent), ui(new Ui::VanillaPage)
+VanillaPage::VanillaPage(NewInstanceDialog *dialog, QWidget *parent)
+	: QWidget(parent), dialog(dialog), ui(new Ui::VanillaPage)
 {
 	ui->setupUi(this);
 	ui->tabWidget->tabBar()->hide();
@@ -27,24 +27,32 @@ VanillaPage::VanillaPage(QWidget *parent)
 
 void VanillaPage::opened()
 {
-	auto vlist = ENV.metadataIndex()->get("net.minecraft");
-	ui->versionList->initialize(vlist.get());
-	if(vlist->isLoaded())
+	if(!initialized)
 	{
-		setSelectedVersion(vlist->getRecommended());
-	}
-	else
-	{
-		vlist->load(Net::Mode::Online);
-		auto task = vlist->getLoadTask();
+		auto vlist = ENV.metadataIndex()->get("net.minecraft");
+		ui->versionList->initialize(vlist.get());
 		if(vlist->isLoaded())
 		{
 			setSelectedVersion(vlist->getRecommended());
 		}
-		if(task)
+		else
 		{
-			connect(task.get(), &Task::succeeded, this, &VanillaPage::versionListUpdated);
+			vlist->load(Net::Mode::Online);
+			auto task = vlist->getLoadTask();
+			if(vlist->isLoaded())
+			{
+				setSelectedVersion(vlist->getRecommended());
+			}
+			if(task)
+			{
+				connect(task.get(), &Task::succeeded, this, &VanillaPage::versionListUpdated);
+			}
 		}
+		initialized = true;
+	}
+	else
+	{
+		suggestCurrent();
 	}
 }
 
@@ -80,21 +88,6 @@ BaseVersionPtr VanillaPage::selectedVersion() const
 	return m_selectedVersion;
 }
 
-void VanillaPage::on_btnChangeVersion_clicked()
-{
-	VersionSelectDialog vselect(ENV.metadataIndex()->get("net.minecraft").get(), tr("Change Minecraft version"), this);
-	vselect.exec();
-	if (vselect.result() == QDialog::Accepted)
-	{
-		BaseVersionPtr version = vselect.selectedVersion();
-		if (version)
-		{
-			m_versionSetByUser = true;
-			setSelectedVersion(version);
-		}
-	}
-}
-
 void VanillaPage::versionListUpdated()
 {
 	if(!m_versionSetByUser)
@@ -104,11 +97,19 @@ void VanillaPage::versionListUpdated()
 	}
 }
 
+void VanillaPage::suggestCurrent()
+{
+	if(m_selectedVersion)
+	{
+		PackSuggestion s;
+		s.name = m_selectedVersion->descriptor();
+		s.valid = true;
+		dialog->setSuggestedPack(s);
+	}
+}
+
 void VanillaPage::setSelectedVersion(BaseVersionPtr version)
 {
 	m_selectedVersion = version;
-	if(m_selectedVersion)
-	{
-		qDebug() << "Version selected:" << version->descriptor();
-	}
+	suggestCurrent();
 }

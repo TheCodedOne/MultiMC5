@@ -26,12 +26,14 @@ namespace Ui
 class VanillaPage;
 }
 
+class NewInstanceDialog;
+
 class VanillaPage : public QWidget, public BasePage
 {
 	Q_OBJECT
 
 public:
-	explicit VanillaPage(QWidget *parent = 0);
+	explicit VanillaPage(NewInstanceDialog *dialog, QWidget *parent = 0);
 	virtual ~VanillaPage();
 	virtual QString displayName() const override
 	{
@@ -58,12 +60,15 @@ public slots:
 	void setSelectedVersion(BaseVersionPtr version);
 
 private slots:
-	void on_btnChangeVersion_clicked();
 	void versionListUpdated();
 	void filterChanged();
 
 private:
+	void suggestCurrent();
+
+private:
 	bool initialized = false;
+	NewInstanceDialog *dialog = nullptr;
 	Ui::VanillaPage *ui = nullptr;
 	bool m_versionSetByUser = false;
 	BaseVersionPtr m_selectedVersion;

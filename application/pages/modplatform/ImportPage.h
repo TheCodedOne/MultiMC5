@@ -26,12 +26,14 @@ namespace Ui
 class ImportPage;
 }
 
+class NewInstanceDialog;
+
 class ImportPage : public QWidget, public BasePage
 {
 	Q_OBJECT
 
 public:
-	explicit ImportPage(QWidget *parent = 0);
+	explicit ImportPage(NewInstanceDialog* dialog, QWidget *parent = 0);
 	virtual ~ImportPage();
 	virtual QString displayName() const override
 	{
@@ -51,10 +53,13 @@ public:
 	}
 	virtual bool shouldDisplay() const override;
 
+	void setUrl(const QString & url);
+
 private slots:
 	void on_modpackBtn_clicked();
 
 private:
-	Ui::ImportPage *ui;
+	Ui::ImportPage *ui = nullptr;
+	NewInstanceDialog* dialog = nullptr;
 };
 

@@ -30,39 +30,42 @@ class FTBPage;
 class FtbListModel;
 class FtbFilterModel;
 class FtbPackDownloader;
+class NewInstanceDialog;
 
 class FTBPage : public QWidget, public BasePage
 {
 	Q_OBJECT
 
 public:
-	explicit FTBPage(QWidget *parent = 0);
+	explicit FTBPage(NewInstanceDialog * dialog, QWidget *parent = 0);
 	virtual ~FTBPage();
-	virtual QString displayName() const override
+	QString displayName() const override
 	{
 		return tr("FTB Legacy");
 	}
-	virtual QIcon icon() const override
+	QIcon icon() const override
 	{
 		return MMC->getThemedIcon("ftb_logo");
 	}
-	virtual QString id() const override
+	QString id() const override
 	{
 		return "ftb";
 	}
-	virtual QString helpPage() const override
+	QString helpPage() const override
 	{
 		return "FTB-platform";
 	}
-	virtual bool shouldDisplay() const override;
+	bool shouldDisplay() const override;
+	void opened() override;
 
 	FtbPackDownloader* getFtbPackDownloader();
-	bool isFtbModpackRequested();
 	FtbModpack getSelectedModpack();
 	QString getSelectedVersion();
 
+private:
+	void suggestCurrent();
+
 private slots:
-	void on_btnChooseFtbPack_clicked();
 	void ftbPackDataDownloadSuccessfully();
 	void ftbPackDataDownloadFailed();
 	void onSortingSelectionChanged(QString data);
@@ -70,13 +73,14 @@ private slots:
 	void onPackSelectionChanged(QModelIndex first, QModelIndex second);
 
 private:
-	bool ftbModpackRequested = false;
+	bool initialized = false;
 	FtbPackDownloader* ftbPackDownloader = nullptr;
 	FtbModpack selectedPack;
 	FtbModpack selected;
 	QString selectedVersion;
-	FtbListModel* listModel;
-	FtbFilterModel* filterModel;
+	FtbListModel* listModel = nullptr;
+	FtbFilterModel* filterModel = nullptr;
+	NewInstanceDialog* dialog = nullptr;
 
-	Ui::FTBPage *ui;
+	Ui::FTBPage *ui = nullptr;
 };

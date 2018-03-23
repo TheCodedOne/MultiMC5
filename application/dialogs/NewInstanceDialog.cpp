@@ -48,14 +48,6 @@ NewInstanceDialog::NewInstanceDialog(const QString & initialGroup, const QString
 	InstIconKey = "default";
 	ui->iconButton->setIcon(MMC->icons()->getIcon(InstIconKey));
 
-
-	/*
-	connect(ui->versionBox, &QRadioButton::clicked, this, &NewInstanceDialog::updateDialogState);
-	connect(ui->versionTextBox, &QLineEdit::textChanged, this, &NewInstanceDialog::updateDialogState);
-
-	connect(ui->ftbBox, &QRadioButton::clicked, this, &NewInstanceDialog::updateDialogState);
-	*/
-
 	auto groups = MMC->instances()->getGroups().toSet();
 	auto groupList = QStringList(groups.toList());
 	groupList.sort(Qt::CaseInsensitive);
@@ -71,24 +63,24 @@ NewInstanceDialog::NewInstanceDialog(const QString & initialGroup, const QString
 	ui->groupBox->setCurrentIndex(index);
 	ui->groupBox->lineEdit()->setPlaceholderText(tr("No group"));
 
-	if(!url.isEmpty())
-	{
-		/*
-		ui->modpackBox->setChecked(true);
-		ui->modpackEdit->setText(url);
-		*/
-	}
+	m_buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok);
+	m_buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+
+	connect(m_buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &QDialog::accept);
+	connect(m_buttons->button(QDialogButtonBox::Help), &QPushButton::clicked, m_container, &PageContainer::help);
+
 	m_container = new PageContainer(this);
 	m_container->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Expanding);
 	ui->verticalLayout->insertWidget(2, m_container);
 
-	m_buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok);
-	m_buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 	m_container->addButtons(m_buttons);
 	m_buttons->setFocus();
 
-	connect(m_buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &QDialog::accept);
-	connect(m_buttons->button(QDialogButtonBox::Help), &QPushButton::clicked, m_container, &PageContainer::help);
+	if(!url.isEmpty())
+	{
+		m_container->selectPage("import");
+		importPage->setUrl(url);
+	}
 
 	updateDialogState();
 
@@ -97,12 +89,13 @@ NewInstanceDialog::NewInstanceDialog(const QString & initialGroup, const QString
 
 QList<BasePage *> NewInstanceDialog::getPages()
 {
+	importPage = new ImportPage(this);
 	return
 	{
-		new VanillaPage(),
-		new FTBPage(),
-		new TwitchPage(),
-		new ImportPage()
+		new VanillaPage(this),
+		new FTBPage(this),
+		new TwitchPage(this),
+		importPage
 	};
 }
 
@@ -114,6 +107,15 @@ QString NewInstanceDialog::dialogTitle()
 NewInstanceDialog::~NewInstanceDialog()
 {
 	delete ui;
+}
+
+void NewInstanceDialog::setSuggestedPack(const PackSuggestion& pack)
+{
+	suggestion = pack;
+	ui->instNameTextBox->setPlaceholderText(suggestion.name);
+
+	auto allowOK = suggestion.valid && !instName().isEmpty();
+	m_buttons->button(QDialogButtonBox::Ok)->setEnabled(allowOK);
 }
 
 void NewInstanceDialog::updateDialogState()
@@ -136,12 +138,7 @@ void NewInstanceDialog::updateDialogState()
 			suggestedName = ftbPackDownloader->getSuggestedInstanceName();
 			ui->labelFtbPack->setText(selectedPack.name);
 		}
-
 	}
-
-	ftbModpackRequested = ui->ftbBox->isChecked();
-
-	ui->instNameTextBox->setPlaceholderText(suggestedName);
 
 	bool allowOK = !instName().isEmpty() && (
 				(ui->versionBox->isChecked() && m_selectedVersion) ||
@@ -149,8 +146,8 @@ void NewInstanceDialog::updateDialogState()
 				(ui->ftbBox->isChecked() && ftbPackDownloader && ftbPackDownloader->isValidPackSelected() )
 				);
 	*/
-	bool allowOK = false;
-	m_buttons->button(QDialogButtonBox::Ok)->setEnabled(allowOK);
+
+
 }
 
 QString NewInstanceDialog::instName() const

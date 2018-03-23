@@ -5,6 +5,7 @@
 #include "FolderInstanceProvider.h"
 #include "dialogs/CustomMessageBox.h"
 #include "dialogs/ProgressDialog.h"
+#include "dialogs/NewInstanceDialog.h"
 
 class UrlValidator : public QValidator
 {
@@ -29,8 +30,8 @@ public:
 	}
 };
 
-ImportPage::ImportPage(QWidget *parent)
-	: QWidget(parent), ui(new Ui::ImportPage)
+ImportPage::ImportPage(NewInstanceDialog* dialog, QWidget *parent)
+	: QWidget(parent), ui(new Ui::ImportPage), dialog(dialog)
 {
 	ui->setupUi(this);
 	/*
@@ -48,6 +49,11 @@ ImportPage::~ImportPage()
 bool ImportPage::shouldDisplay() const
 {
 	return true;
+}
+
+void ImportPage::setUrl(const QString& url)
+{
+	qDebug() << "Selecting URL:" << url;
 }
 
 void ImportPage::on_modpackBtn_clicked()

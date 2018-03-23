@@ -20,6 +20,11 @@
 #include "BaseVersion.h"
 #include "pages/BasePageProvider.h"
 
+struct PackSuggestion
+{
+	bool valid = false;
+	QString name;
+};
 
 namespace Ui
 {
@@ -28,6 +33,7 @@ class NewInstanceDialog;
 
 class PageContainer;
 class QDialogButtonBox;
+class ImportPage;
 
 class NewInstanceDialog : public QDialog, public BasePageProvider
 {
@@ -38,6 +44,8 @@ public:
 	~NewInstanceDialog();
 
 	void updateDialogState();
+
+	void setSuggestedPack(const PackSuggestion & pack);
 
 	QString instName() const;
 	QString instGroup() const;
@@ -54,9 +62,11 @@ slots:
 	virtual void closeEvent(QCloseEvent *event);
 
 private:
-	Ui::NewInstanceDialog *ui;
-	PageContainer * m_container;
-	QDialogButtonBox * m_buttons;
+	Ui::NewInstanceDialog *ui = nullptr;
+	PageContainer * m_container = nullptr;
+	QDialogButtonBox * m_buttons = nullptr;
 
 	QString InstIconKey;
+	PackSuggestion suggestion;
+	ImportPage *importPage = nullptr;
 };

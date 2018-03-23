@@ -5,9 +5,10 @@
 #include "FolderInstanceProvider.h"
 #include "dialogs/CustomMessageBox.h"
 #include "dialogs/ProgressDialog.h"
+#include "dialogs/NewInstanceDialog.h"
 
-TwitchPage::TwitchPage(QWidget *parent)
-	: QWidget(parent), ui(new Ui::TwitchPage)
+TwitchPage::TwitchPage(NewInstanceDialog* dialog, QWidget *parent)
+	: QWidget(parent), ui(new Ui::TwitchPage), dialog(dialog)
 {
 	ui->setupUi(this);
 }

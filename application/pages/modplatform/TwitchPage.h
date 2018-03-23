@@ -26,12 +26,14 @@ namespace Ui
 class TwitchPage;
 }
 
+class NewInstanceDialog;
+
 class TwitchPage : public QWidget, public BasePage
 {
 	Q_OBJECT
 
 public:
-	explicit TwitchPage(QWidget *parent = 0);
+	explicit TwitchPage(NewInstanceDialog* dialog, QWidget *parent = 0);
 	virtual ~TwitchPage();
 	virtual QString displayName() const override
 	{
@@ -52,5 +54,6 @@ public:
 	virtual bool shouldDisplay() const override;
 
 private:
-	Ui::TwitchPage *ui;
+	Ui::TwitchPage *ui = nullptr;
+	NewInstanceDialog* dialog = nullptr;
 };

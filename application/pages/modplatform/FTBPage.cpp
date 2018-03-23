@@ -4,20 +4,18 @@
 #include "MultiMC.h"
 #include "FolderInstanceProvider.h"
 #include "dialogs/CustomMessageBox.h"
-#include "dialogs/ProgressDialog.h"
+#include "dialogs/NewInstanceDialog.h"
 #include "modplatform/ftb/FtbPackDownloader.h"
 #include <FtbListModel.h>
 
-FTBPage::FTBPage(QWidget *parent)
-	: QWidget(parent), ui(new Ui::FTBPage)
+FTBPage::FTBPage(NewInstanceDialog* dialog, QWidget *parent)
+	: QWidget(parent), ui(new Ui::FTBPage), dialog(dialog)
 {
 	ui->setupUi(this);
 	ftbPackDownloader = new FtbPackDownloader();
 
 	connect(ftbPackDownloader, &FtbPackDownloader::ready, this, &FTBPage::ftbPackDataDownloadSuccessfully);
 	connect(ftbPackDownloader, &FtbPackDownloader::packFetchFailed, this, &FTBPage::ftbPackDataDownloadFailed);
-
-	ftbPackDownloader->fetchModpacks(false);
 
 	filterModel = new FtbFilterModel(this);
 	listModel = new FtbListModel(this);
@@ -54,27 +52,30 @@ bool FTBPage::shouldDisplay() const
 	return true;
 }
 
-bool FTBPage::isFtbModpackRequested()
+void FTBPage::opened()
 {
-	return ftbModpackRequested;
+	if(!initialized)
+	{
+		ftbPackDownloader->fetchModpacks(false);
+		initialized = true;
+	}
+	else
+	{
+		suggestCurrent();
+	}
+}
+
+void FTBPage::suggestCurrent()
+{
+	PackSuggestion s;
+	s.name = selected.name;
+	s.valid = !selected.broken;
+	dialog->setSuggestedPack(s);
 }
 
 FtbPackDownloader *FTBPage::getFtbPackDownloader()
 {
 	return ftbPackDownloader;
-}
-
-void FTBPage::on_btnChooseFtbPack_clicked()
-{
-	/*
-	ChooseFtbPackDialog dl(ftbPackDownloader->getModpacks());
-	dl.exec();
-	if(dl.result() == QDialog::Accepted) {
-		selectedPack = dl.getSelectedModpack();
-		ftbPackDownloader->selectPack(selectedPack, dl.getSelectedVersion());
-	}
-	updateDialogState();
-	*/
 }
 
 void FTBPage::ftbPackDataDownloadSuccessfully()
@@ -109,8 +110,7 @@ void FTBPage::onPackSelectionChanged(QModelIndex now, QModelIndex prev)
 	}
 
 	selected = selectedPack;
-	// FIXME: implement accept flow
-	// ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!selected.broken);
+	suggestCurrent();
 }
 
 void FTBPage::onVersionSelectionItemChanged(QString data)
